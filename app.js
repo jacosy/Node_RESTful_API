@@ -1,11 +1,12 @@
-var express = require('express');
+/* eslint-disable no-undef */
+const express = require('express');
 
-var app = express();
+const app = express();
 
-var port  = process.env.port || 3000;
+const port  = process.env.port || 3000;
 
 app.get('/', (req, res)=>{
-    res.send('Welcome to my API!');
+    res.send('Welcome to my first API project!');
 });
 
 app.listen(port, ()=>{
