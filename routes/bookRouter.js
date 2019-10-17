@@ -33,27 +33,28 @@ function routes(Book) {
       });
     });
 
+  bookRouter.use('/books/:bookId', (req, res, next) => {
+    Book.findById(req.params.bookId, (err, book) => {
+      if (err === null) {
+        if (book === null) {
+          return res.sendStatus(404);
+        }
+        req.book = book;
+        return next();
+      }
+      return res.send(err);
+    });
+  });
   bookRouter.route('/books/:bookId')
-    .get((req, res) => {
-      Book.findById(req.params.bookId, (err, book) => {
-        if (err === null) {
-          return res.json(book);
-        }
-        return res.send(err);
-      });
-    })
+    .get((req, res) => res.json(req.book))
     .put((req, res) => {
-      Book.findById(req.params.bookId, (err, book) => {
-        if (err === null) {
-          book.title= req.body.title;
-          book.author= req.body.author;
-          book.genre= req.body.genre;
-          book.read= req.body.read;
-          book.save();
-          return res.json(book);
-        }
-        return res.send(err);
-      });
+      const { book } = req;
+      book.title = req.body.title;
+      book.author = req.body.author;
+      book.genre = req.body.genre;
+      book.read = req.body.read;
+      book.save();
+      return res.json(book);
     });
 
   return bookRouter;
