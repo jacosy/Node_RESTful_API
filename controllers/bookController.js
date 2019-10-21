@@ -23,8 +23,14 @@ function bookController(Book) {
     }
     Book.find(query, (err, books) => {
       if (err === null) {
-        //console.log(books);
-        return res.json(books);
+        const returnBooks = books.map(book => {
+          let returnBook = book.toJSON();
+          returnBook.links = {
+            self: `http://${req.headers.host}/api/books/${book._id}`
+          };          
+          return returnBook;
+        })
+        return res.json(returnBooks);
       }
       return res.send(err);
     });
